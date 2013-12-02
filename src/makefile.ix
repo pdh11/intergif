@@ -1,0 +1,30 @@
+# Makefile.ix
+
+# Unix makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=cc
+LinkFlags = -o $@
+cc = cc
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused
+
+.SUFFIXES: .c .o
+
+Objects = animlib.o colmatch.o commonpal.o count.o frame.o from.o \
+            fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
+            loadgif.o loadsprite.o loadtca.o main.o mediancut.o \
+            palettemap.o riemann.o savegif.o savesprite.o split.o \
+            win32.o workspace.o
+
+all: ../intergif
+
+../intergif: $(Objects)
+	$(Link) $(LinkFlags) $(Objects)
+
+.c.o:
+	@echo Compiling $<
+	@$(cc) $(CCflags) -o $@ $<

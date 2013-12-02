@@ -1,0 +1,4 @@
+#include "resource.h"
+
+IDB_TOOLS               BITMAP  DISCARDABLE     "tools.bmp"
+IDB_TOOLS1              BITMAP  DISCARDABLE     "tools1.bmp"

@@ -1,0 +1,6 @@
+| !Boot file for Viewer 1.01
+
+IconSprites <Obey$Dir>.!Sprites
+Set InterGif$Viewer$Dir <Obey$Dir>
+If "<File$Type_695>" = "" Then Set File$Type_695 GIF
+Set Alias$@RunType_695 "/<InterGif$Viewer$Dir> "

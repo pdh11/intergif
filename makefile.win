@@ -1,0 +1,32 @@
+# nmake top-level file for intergif
+
+all: intergif igviewer
+
+intergif:
+	@cd src
+	@nmake /nologo /f makefile.win
+	@cd ..
+
+igviewer: intergif
+	@cd viewersrc
+	@nmake /nologo /f makefile.win
+	@cd ..
+
+filelist: filelist.txt
+
+# This only works on my system: the '6' depends on the distance of the remote
+# repository from the root :-( but there seems no other way to do it short of
+# finding out how to use sed :-((
+
+filelist.txt:
+	@cvs status | grep Repository | cut -f 3 | cut -d, -f 1 | cut -d/ -f 6- > filelist.txt
+
+# making a release requires Info-Zip
+release: intergif igviewer filelist.txt
+	@zip -q9 ig.zip intergif.exe igviewer.exe Copying
+	@echo ig.zip done
+	@cat filelist.txt | zip -q9 igsrc.zip -@
+	@echo igsrc.zip done
+
+clean:
+	@del /Q src\*.o viewersrc\*.o src\anim.lib

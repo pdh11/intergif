@@ -1,0 +1,89 @@
+| Make release archives of InterGif
+|
+| Can't easily do directory copies cos of CVS
+
+| 1. Binary archive
+
+create ig
+delete ig
+SparkFSCreate 1 ig
+
+set alias$doit copy %%0 ig.%%0 a~c~df~l~n~p~q~r~s~t~v
+doit Copying
+cdir ig.!InterGif
+doit !InterGif.!Boot
+doit !InterGif.!Help
+doit !InterGif.!Run
+doit !InterGif.!Sprites
+doit !InterGif.!RunImage
+doit !InterGif.Copying
+doit !InterGif.intergif
+cdir ig.!IGViewer
+doit !IGViewer.!Boot
+doit !IGViewer.!Help
+doit !IGViewer.!Run
+doit !IGViewer.!Sprites
+doit !IGViewer.!RunImage
+doit !IGViewer.Copying
+
+
+| 2. Source archive
+
+create igsrc
+delete igsrc
+SparkFSCreate 1 igsrc
+
+set alias$doit copy %%0 igsrc.%%0 a~c~df~l~n~p~q~r~s~t~v
+doit Copying
+cdir igsrc.!InterGif
+doit !InterGif.!Boot
+doit !InterGif.!Help
+doit !InterGif.!Run
+doit !InterGif.!Sprites
+doit !InterGif.Copying
+cdir igsrc.!IGViewer
+doit !IGViewer.!Boot
+doit !IGViewer.!Help
+doit !IGViewer.!Run
+doit !IGViewer.!Sprites
+doit !IGViewer.Copying
+cdir igsrc.bin
+doit bin.findtypes
+doit bin.release
+doit bin.rescompile
+doit bin.types
+doit Makefile
+doit makefile/ix
+doit makefile/win
+cdir igsrc.src
+doit src.betatest
+doit src.c
+doit src.h
+doit src.Makefile
+doit src.makefile/ix
+doit src.makefile/win
+doit src.Menus
+cdir igsrc.src.o
+doit src.s
+doit src.Sprites
+doit src.Templates
+cdir igsrc.viewersrc
+doit viewersrc.c
+doit viewersrc.s
+doit viewersrc.h
+doit viewersrc.Makefile
+doit viewersrc.Makefile/win
+doit viewersrc.Menus
+doit viewersrc.Sprites
+doit viewersrc.Templates
+doit viewersrc.tools/bmp
+doit viewersrc.tools1/bmp
+doit viewersrc.winview/mdp
+doit viewersrc.winview/rc
+cdir igsrc.viewersrc.o
+cdir igsrc.examples
+doit examples.c
+doit examples.Makefile
+doit examples.Readme
+cdir examples.o
+echo Done!

@@ -1,0 +1,6 @@
+| !Run file for Viewer 1.01
+
+Set InterGif$Viewer$Dir <Obey$Dir>
+IconSprites <Obey$Dir>.!Sprites
+WimpSlot -min 160k -max 160k
+Run <InterGif$Viewer$Dir>.!RunImage %*0

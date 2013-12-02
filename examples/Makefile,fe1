@@ -1,0 +1,25 @@
+# Makefile
+
+# RiscOS makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+.SUFFIXES:   .c .o .s
+CCFlags = -c -IC: -I@.^.src
+LinkFlags = -aif
+Link = link
+CC = cc
+
+Objects = igexample.o
+
+Libraries = ^.src.Lib Extras:Lib DeskLib:o.DeskLib C:o.Stubs
+
+igexample: $(Objects)
+	$(Link) $(LinkFlags) $(Libraries) $(Objects) -o $@
+
+.c.o:;	$(CC) $(CCFlags) -o $@ $<
+
+# Dynamic dependencies:

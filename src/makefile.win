@@ -1,0 +1,44 @@
+# Makefile.win
+
+# nmake input file for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=link
+LinkFlags = /OUT:$@ /nologo /libpath:"g:\programs\microsoft visual studio\vc98\lib"
+
+cc = cl
+CCflags = /nologo /c /Ox /DWIN32 /W3
+Lib=lib
+LibFlags = /OUT:$@ /nologo
+
+.SUFFIXES: .c .o
+
+LibObjects = animlib.o colmatch.o commonpal.o count.o frame.o from.o \
+            fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
+            loadgif.o loadsprite.o loadtca.o mediancut.o \
+            palettemap.o riemann.o savegif.o savesprite.o split.o \
+            win32.o workspace.o
+
+IGObjects = main.o
+
+Libs = ../src/anim.lib kernel32.lib advapi32.lib user32.lib gdi32.lib \
+	comdlg32.lib winspool.lib version.lib shell32.lib
+
+all: ../intergif.exe
+
+../intergif.exe: $(IGObjects) anim.lib
+    @echo Linking...
+    @$(Link) $(IGObjects) anim.lib $(LinkFlags) $(Libs)
+    @echo Done
+
+anim.lib: $(LibObjects)
+	$(Lib) $(LibFlags) $(LibObjects)
+    
+.c.o:
+	@$(cc) $(CCflags) /Fo$@ $<
+
+.s.o:;	objasm $(ASflags) -to $@ -from $<

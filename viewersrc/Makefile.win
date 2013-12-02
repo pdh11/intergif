@@ -1,0 +1,37 @@
+# Makefile.win
+
+# nmake input file for InterGif viewer
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=link
+LinkFlags = /OUT:$@ /nologo /RELEASE /MAP
+cc = cl
+CCflags = /Ox /nologo /c /DWIN32 /W3
+rc = rc
+
+.SUFFIXES: .c .o
+
+Objects = winview.o winview.res
+
+Libs = ../src/anim.lib kernel32.lib advapi32.lib user32.lib gdi32.lib \
+	comdlg32.lib winspool.lib version.lib shell32.lib
+
+all: ../igviewer.exe
+
+../igviewer.exe: $(Objects) ../src/anim.lib
+    @echo Linking...
+    @$(Link) $(LinkFlags) $(Objects) $(Libs)
+    @echo Done
+
+.c.o:
+	@$(cc) $(CCflags) /Fo$@ $<
+
+winview.res: winview.rc tools.bmp tools1.bmp
+	@echo Compiling resources...
+	@$(rc) /v /Fo winview.res winview.rc
+
+.s.o:;	objasm $(ASflags) -to $@ -from $<

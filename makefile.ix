@@ -1,0 +1,13 @@
+# Top-level Unix makefile for intergif
+
+intergif:
+	@cd src && make -f makefile.ix
+
+release: intergif
+	@tar -czf ig.tgz intergif Copying
+	rm -rf igsrc
+	cvs export -d igsrc -r HEAD intergif
+	@tar czf igsrc.tgz igsrc
+
+filelist.txt:
+	@cvs status | grep Repository | cut -f 3 | cut -d, -f 1 | cut -d/ -f 6- > filelist.txt

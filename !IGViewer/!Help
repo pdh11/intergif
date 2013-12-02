@@ -1,0 +1,97 @@
+
+                InterGif Viewer 1.06
+                ====================
+
+        by Peter Hartley (K) All Rites Reversed
+    Acknowledgements to authors of SESanim and ReplayGIF
+
+INTERGIF VIEWER is a program for displaying animated GIFs. It
+will also display sprites (except deep sprites), Draw files, and
+most files produced with Iota Software's (commercial) animation
+program The Complete Animator. It has been designed to work
+alongside InterGif, the animated GIF creation program.
+
+
+        Get the latest version
+        ----------------------
+
+The latest versions of InterGif and InterGif Viewer, plus more
+help information and full source code for various platforms, are
+always available on the World-Wide Web at the address
+        http://utter.chaos.org.uk/~pdh/software/intergif.htm
+It's the tenth of December, 2000, as I'm writing these words: if
+it's long after that that you're reading them, you might want to
+see if there's a later version now available.
+
+
+        Distribution
+        ------------
+
+InterGif Viewer is NOT COPYRIGHTED and is NOT distributed under
+the GNU General Public Licence. For full information read the
+file !IGViewer.Copying or go to the Web site.
+    InterGif Viewer is mine: in particular, it doesn't belong to
+SonicBlue or ANT Limited. If it gets anything wrong, it's my
+problem, not theirs.
+    In order to display Draw files you will need Acorn's Drawfile
+module. This is not included in InterGif Viewer distributions, and
+ftp.acorn.co.uk isn't there any more; try doing a Google search
+for drawfile.arc (Hensa or Sunsite might have it).
+
+
+        Features
+        --------
+
+  o Well, only one really: it shows animations.
+
+  o Oh, thought of another one: it anti-aliases Draw files for
+    you, like InterGif does. It does need lots of memory to do
+    this, though.
+
+
+        Limitations
+        -----------
+
+  o InterGif Viewer is built mostly from the same code as
+    InterGif itself, and so it shares InterGif's limitations.
+    Principally, these are an inability to load:
+
+      * Deep sprites
+      * Animator files in deep modes
+      * Uncompressed or delta-compressed Animator files
+      * Any animation with more than 256 distinct colours
+        in total
+
+  o Sound effects in Animator files are not played.
+
+
+        Desktop use
+        -----------
+
+Run !IGViewer and drag your sprite file, Animator file, Draw
+file, or GIF onto the icon bar. A viewer will appear, with play
+tools if your animation has more than one frame. Select-clicking
+on the < and > icons plays the film backwards or forwards
+respectively; Adjust-clicking steps by one frame backwards or
+forwards. The end icons take you to the first or last frame of
+the animation. More than one animation can be loaded (and
+playing) at once.
+    As you've probably noticed, the icon bar menu has a "Web
+site" item. Choosing this takes you to my Web pages on ANT
+Limited's server, as described above. For this to work, you need
+to be connected to the Internet, and also have a Web browser
+loaded which understands ANT's URL broadcast message -- for
+example, Fresco or ArcWeb. (Probably the others too, these days.)
+
+
+        See also
+        --------
+
+    The InterGif page
+        http://utter.chaos.org.uk/~pdh/software/intergif.htm
+    The Complete Animator
+        http://www.iota.co.uk/animator/
+
+
+                                                 pdh@chaos.org.uk
+                                              10th December, 2000

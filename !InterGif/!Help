@@ -1,0 +1,569 @@
+
+                    InterGif 6.15
+                    =============
+
+         by Peter Hartley (K) All Rites Reversed
+     Desktop front-end adapted from one by Iain Logan
+   Floyd-Steinberg dithering, greyscale conversion, and
+       sprite options contributed by Martin Würthner
+
+INTERGIF 6.15 is a program for making GIF images from RiscOS
+sprite files, or from Draw files, or from files produced with
+Iota Software's (commercial) animation program The Complete
+Animator. It can also convert from GIFs back to sprites, and can
+also be used as an optimiser for animated GIFs prepared in other
+programs.
+
+Please note that InterGif 6.15 is 32-bit compatible and requires
+the 32-bit SharedCLib. If you do not have that the front-end will
+complain and refuse to run. The new CLib is available from
+  http://www.iyonix.com/32bit/system.shtml
+
+The 32-bit SharedCLib is compatible with RiscOS 3.10 and later.
+If you use RiscOS 3.00 or RiscOS 2, InterGif 6.15 will not run,
+and you should use InterGif 6.12 instead.
+
+
+        Get the latest version
+        ----------------------
+
+The latest version of InterGif, plus more help information and
+full source code for various platforms, is always available on
+the World-Wide Web at the address
+        http://utter.chaos.org.uk/~pdh/software/intergif.htm
+It's the fifth of October, 2004, as I'm writing these words: if
+it's long after that that you're reading them, you might want to
+see if there's a later version now available.
+
+
+        Distribution
+        ------------
+
+InterGif is NOT COPYRIGHTED and is NOT distributed under the GNU
+General Public Licence. For full information read the file
+!InterGif.Copying or go to the Web site.
+    InterGif is mine: in particular, it doesn't belong to my
+employers, SonicBlue, or my ex-employers, ANT Limited. If it gets
+anything wrong, it's my problem, not theirs.
+    Versions 6 and later of InterGif contain (a small piece of)
+code developed by the Independent JPEG Group. (The "Find best
+palette" routine, if you must know.)
+    In order to convert Draw files you will need Acorn's Drawfile
+module. This is not included in InterGif distributions but is
+included in ROM in reasonably recent versions of RiscOS. If you
+cannot find a copy in ROM or in !System.Modules.310, then the
+Acorn FTP server mirror at www.riscos.com can provide a copy.
+
+
+        Features
+        --------
+
+  o InterGif runs either on the desktop, or from the command line
+    (so I can produce the GIFs for my own Web pages, from the
+    sprites which constitute their source, using a make file!).
+
+  o InterGif has options for the transparency and interleaving
+    features of GIF89a.
+
+  o InterGif can take a sprite file (or an Animator file)
+    containing several frames, and produce from it an animated
+    GIF which Netscape 2.0 or later, MSIE 3.0beta1 or later, or
+    ANT Fresco 1.22 or later will render as animated if it's
+    inlined in a Web page. The animation delay can be set
+    individually for each frame, or for the whole animation.
+
+  o InterGif will reduce its input to a smaller number of colours
+    (unless you explicitly tell it not to) if it can get away
+    with it, i.e. if only that many of the colours are used
+    anyway.
+
+  o It will also compress only the rectangle which has changed on
+    each frame, so if your animation has a complex but stationary
+    background, the background will only get compressed once.
+    Deviousness and cunning are employed to minimise the final
+    size of the GIF: so much so that many animated GIFs I've
+    found on the Web have ended up smaller when run through
+    InterGif.
+
+  o It can also make GIF images from Draw files. It uses, for
+    this, the same code that is in my AADraw program (see end),
+    which means it produces GIFs or sprites with a 216-colour
+    cube palette (as used on Macintoshes and by Netscape and MSIE
+    for Windows), *not* the standard Acorn 256-colour palette.
+    (For AADraw connoisseurs, I'll add that you don't get the -b
+    feature of that program: InterGif always anti-aliases to
+    white.)
+
+  o InterGif 6 lets you forcibly reduce a GIF's palette to the
+    standard Acorn 256-colour palette, or to a 216-entry colour
+    cube (as used on the Macintosh and by most Windows browsers),
+    or to a palette file you supply. Alternatively, it can
+    calculate the best palette for displaying the GIF, and then
+    reduce to that. (This is not the same as the colour reduction
+    InterGif has always had: it is lossy and you should keep
+    copies of your unmapped originals.)
+
+  o InterGif 6.03 and later can pre-process each of your images
+    using Acorn's ChangeFSI: see below for more details.
+
+  o InterGif 6.11 and later can use Floyd-Steinberg dithering to
+    improve the output from 16bpp, 32bpp and Draw input files.
+    This code was contributed by Martin Würthner of MW Software,
+    for which much thanks!
+  
+  o InterGif 6.15 can reduce colours to greyscale palettes (16 or
+    256 colours), both when producing sprites and when producing
+    GIFs. It can produce new format sprites, which are limited to
+    RiscOS 3.5 and above but have more efficient masking
+    information and allow the resolution to be specified (again
+    contributed by Martin Würthner).
+
+
+        Changes since 6.12
+        ------------------
+  
+  o Added greyscale conversion capability ("16 greys" and "256
+    greys" options in palette window, -g16, -g256 options).
+
+  o Added "Sprite options..." button and Sprite options window
+    (with "Force new sprite format" and resolution controls,
+    -new, -xdpi, -ydpi options).
+
+  o New -list option for creating an animation from a list of
+    image filenames in a text file. (Not currently accessible
+    from the desktop front-end.)
+
+  o Front-end has moved to a more Style Guide compliant look.
+
+  o My work email address from a job I left over four years
+    ago now has been excised from the sources!
+
+  
+        Changes since 6.07
+        ------------------
+
+  o New "Keep unused entries" icon to access the -same option from
+    the desktop version.
+
+  o -same now does the Right Thing when used with -216 or -256; in
+    other words, all 216 (or 256) colours are kept in the output,
+    in the right order.
+
+  o Output sprites which would get the default palette, now get no
+    palette at all.
+
+  o A bug to do with one-pixel-wide output GIFs has been fixed.
+
+  o New -diffuse and -zigzag options to access Martin Würthner's
+    Floyd-Steinberg dithering code.
+
+  o A bug in Draw file conversion on pre-RiscPC machines has been
+    fixed.
+
+
+        Desktop use
+        -----------
+
+Pretty straightforward. Run !InterGif; drag your sprite file,
+Animator file, Draw file, or GIF onto the left-hand bit of the
+window; set any options you want in the middle bit of the window;
+and save your GIF or sprite file out from the right-hand bit of
+the window. The options are:
+
+  o Interlaced
+        Produce an interlaced GIF: in other words, one which a Web
+    browser can render quickly at a low resolution, filling in the
+    details later as they arrive.
+
+  o Looping animation
+        Normally an animated GIF plays through once and stops. If
+    you tick this option, you'll get an animated GIF that plays
+    over and over again. This is a Netscape extension to the GIF
+    format, but hopefully it will become a popular one -- both
+    MSIE and Fresco now support it too.
+
+  o Join input files
+        This option causes InterGif to look for only one frame in
+    the file you give it, and then look for the next frame in
+    another file with the numeric part of the file incremented.
+    For instance, you could have three files called frame000,
+    frame001, and frame002 and create an three-frame animation by
+    dragging frame000 (only) onto the InterGif window and
+    choosing "Join input files".
+
+  o Set delay
+        This lets you set the frame rate, in centiseconds. This
+    overrides any frame rate specified in the input file.
+        If this is *not* ticked, InterGif's output uses the
+    same frame rate as its input. You can change frame delays
+    individually in Animator files in the usual way (in Animator,
+    press F7) or in sprite files by giving the frames sprite
+    names with "delay" in them: for instance, a sprite called
+    "037delay25" will be given a delay of 25 centiseconds.
+    (Anything before the word "delay" is ignored.)
+        If you leave "Set delay" unticked, and the input file
+    doesn't specify frame delays, a default of 8 centiseconds per
+    frame (12.5 frames per second) is used.
+        Note that you can't have different delays for different
+    frames if you tick "Set delay"; if you want that, you have to
+    set it up in your sprite or Animator file.
+
+  o Transparency
+        Choose None to get a wholly opaque GIF (no masking), Auto
+    to get InterGif to use the sprites' masks (or the film's
+    background colour); or you can specify a transparent
+    pixel-value directly.
+        (Hint: to find out what pixel-value a sprite pixel has,
+    load the sprite into Paint, ensure its palette window is
+    showing, click Menu over the pixel you want, and choose
+    "Paint->Select colour".)
+
+  o Trim
+        This option causes InterGif to remove wholly transparent
+    rows and columns from the edges of the image. This means that
+    the output image may be a different size from the input one,
+    which is otherwise never the case.
+        You probably want to tick this if you're converting a
+    Draw file, as these often end up with one or two transparent
+    rows and columns at the edges.
+
+  o Split output
+        This splits up the input file into one output file per
+    frame. Not, I admit, terribly useful, unless you need to
+    import something into an application that expects lots of
+    one-frame GIFs -- for instance, Sun's Java Animator applet.
+    The names of the files are taken from the one you give, with
+    any numeric part incremented as needed, so if you save a
+    three-frame animation as frame001/gif, you also get
+    frame002/gif and frame003/gif.
+
+  o Web site
+        Clicking on this button takes you to my Web pages on
+    chaos, as described above. For this to work, you need to be
+    connected to the Internet, and also have a Web browser loaded
+    which understands ANT's URL broadcast message -- for example,
+    Fresco or ArcWeb. (Probably the others too, these days.)
+
+  o Palette...
+        This icon opens the Palette Options window, giving you
+    the following further options:
+
+      o Use existing
+            This does the same as previous versions of InterGif:
+        it discards palette entries that aren't actually used,
+        but keeps all the others.
+
+      o Acorn standard 256
+      o ”Web Safe• 216
+            These map all colours in the input onto the nearest
+        ones in either the standard Acorn 256-colour "mode 15"
+        palette, or the Macintosh/PC/Web standard 216-entry colour
+        cube. This is useful, for instance, for reducing the size
+        of 256-greyscale images.
+
+      o 16 greys
+            Produces 16-colour output with grey scales only. This
+	is much like supplying a greyscale palette with "from file",
+	except that error diffusion (if selected) is done entirely
+	in greyscale. This avoids colour fringing.
+
+      o 256 greys
+            Produces 256-colour output with grey scales only. This
+	is much like supplying a greyscale palette with "from file",
+	except that error diffusion (if selected) is done entirely
+	in greyscale. This avoids colour fringing.
+
+      o From file
+            You can also map colours to those in any Acorn
+        palette file (such as one saved from !Paint).
+
+      o Find best
+            This is the most powerful option: selecting this
+        makes InterGif calculate the optimal palette for
+        displaying the input images, and then map to that. You
+        can tell it to calculate any size palette from 2 to 256
+        entries. InterGif uses the "median cut" algorithm to
+        calculate the palette.
+
+      o Keep unused entries
+            Tick this if you want all the colours present in the
+        input palette to be present in the output palette, even
+        ones which aren't used in the animation. If you tick this
+        as well as "Acorn standard 256" above, and choose sprite
+        output in the main window, InterGif will generate sprites
+        with no palette, which are suitable for use as icons.
+
+      o Error diffusion (dither)
+            Tick this if you want the output image to be dithered
+        to the required palette (like ChangeFSI does), instead of
+        just being mapped like in versions of InterGif prior to
+        6.11. Dithering improves the image quality, but makes the
+        GIF compression algorithm work less well, so file sizes
+        will tend to be larger.
+            This option only works on "deep" input files, i.e.
+        16bpp or 24bpp sprites, or Draw files. If you tick this,
+        you get zig-zagged dithering; there's no way to enable
+        non-zig-zagged dithering ('cos it's not very useful).
+
+  o ChangeFSI...
+        This icon opens the InterGif calling ChangeFSI window,
+    which gives you the option of pre-processing InterGif's input
+    file with Acorn's ChangeFSI image manipulation
+    program. This is mainly useful for importing files in formats
+    which InterGif doesn't understand directly: for instance, the
+    "Targa" files output by POV-Ray for Windows.
+        InterGif can give ChangeFSI any of a large range of
+    command-line options: most of the time you probably want this
+    set to just
+            28
+     -- which tells ChangeFSI to convert things to 256-colour
+    sprites. For details of the other options you can apply, see
+    the "FSIuse" text file inside the !ChangeFSI directory.
+        If the icons in this window are greyed out, this means
+    <ChangeFSI$Dir> isn't set: you should make sure !ChangeFSI
+    has been seen by the filer. If you don't have ChangeFSI at
+    all, or if you've got a version older than 1.12, you used to
+    be able to get 1.12 from Acorn's FTP site -- but heaven knows
+    where to get your hands on it nowadays.
+        There's a whole section on ChangeFSI later on in this
+    Help file.
+  
+  o Sprite options...
+        This icon opens the Sprite options window, which gives
+    you some special options for sprite output.
+
+      o Force new sprite format
+            By default, InterGif, just like Paint, will produce old
+        format sprites that are understood by all versions of
+        RiscOS. With this option ticked, InterGif produces new
+        format sprites, which are limited to RiscOS 3.5 or
+        higher but have much more efficient masking information
+        (for a 256 colour sprite, only 1/8 of the size of that
+        needed by the corresponding old format sprite). In
+        addition, using the new format allows you to specify the
+        horizontal and vertical sprite resolutions. Choosing the
+        180dpi options results in "hi-res" sprites for so-called
+        "EX0" screen modes supported by RiscOS 5.
+
+
+        Command-line use
+        ----------------
+
+The !Boot file of !InterGif sets up Alias$intergif, so you no
+longer need to copy the intergif file into your library
+directory.
+    At its simplest, you can just type intergif and the name of
+your sprite or film file, and it'll be converted. Here's a full
+list of the options:
+
+intergif [-i] [-loop] [-s ] [-split] [-d cs] [-t [pixel]] [-trim] [-join]
+         [-216 | -256 | -g16 | -g256 | -pal palfile | -best n ] [-same]
+         [-new [-xdpi x] [-ydpi y]] [-c cfsi-options] [-diffuse [-zigzag]]
+         [-list] [-o outfile] infile
+
+    -i
+        Produce an interlaced GIF
+    -loop
+        Looping animation
+    -s
+        Produce a sprite rather than a GIF
+    -join
+        Join several input files
+    -list
+	Treat "infile" as a text file full of image filenames to convert
+    -split
+        One frame per file
+    -d cs
+        Frame delay in centiseconds
+    -t
+        Use automatic transparency (default is no transparency)
+    -t pixel
+        Use specified pixel as transparent
+    -trim
+        Remove any transparent border
+    -216
+        Map to Macintosh/PC colour-cube palette
+    -256
+        Map to Acorn mode 15 palette
+    -g16
+        Map to 16 greyscale palette
+    -g256
+        Map to 256 greyscale palette
+    -pal palfile
+        Map to given palette
+    -best n
+        Find best n-colour palette and map to that (2<=n<=256)
+    -same
+        Keep (don't discard) unused palette entries
+    -c cfsi-options
+        Preprocess using ChangeFSI with the given options (see below)
+    -diffuse
+        Use error diffusion (Floyd-Steinberg dithering)
+    -zigzag
+        Use boustrophedonic (zig-zagged) Floyd-Steinberg dithering
+    -new
+        Output new format sprites (only useful with -s option)
+    -xdpi x
+        Set horizontal resolution to <x> (x must be 22, 45, 90 or
+        180; only useful with -new option)
+    -ydpi y
+        Set horizontal resolution to <y> (y must be 22, 45, 90 or
+        180; only useful with -new option)
+    -o outfile
+        Filename for the output (default is <infile>/gif)
+    infile
+        A RiscOS sprite, Draw, Complete Animator or GIF file
+
+
+        Size is important
+        -----------------
+
+Since at least version 2.02, InterGif has optimised out any
+wholly transparent rows and columns at the edges of the first (or
+only) frame of transparent GIFs. It does this by setting the size
+in the Logical Screen Descriptor to the size of the whole GIF,
+and the size in the first Frame Descriptor to the smaller
+rectangle which bounds the first frame. This is all completely as
+per GIF spec, and is what happens for the second and subsequent
+frames of animated GIFs anyway.
+    However, some programs which read GIFs (usually those which
+either don't understand animations, or don't understand
+transparency) incorrectly ignore the LSD size and use the FD
+size. These programs include ChangeFSI, Claris HomePage, and
+early versions of Fresco (before 1.60). This is a problem as it
+can lead to Web authors specifying the wrong WIDTH= and HEIGHT=
+attributes in Web pages. All versions of Netscape and MSIE use
+the LSD size (at least for GIF89's).
+    Early versions of the program "Creator" only set the FD size
+and not the LSD size; such images look wrong in MSIE. Netscape
+cheats! and uses only the FD size for GIF87 images and
+(correctly) the LSD size for GIF89 images. As of version 1.63,
+this is Fresco's behaviour too.
+
+
+        Netscape Communicator
+        ---------------------
+
+Some interlaced transparent GIFs made with version 6.01 or
+earlier of InterGif may look wrong in Netscape Communicator
+(Netscape 4): any that do, should be reconverted with version
+6.02 or later. You may wish to use the new -trim option; if not,
+your GIF will be compressed slightly less well than it could be.
+This is due to a bug in Netscape 4, not in InterGif. For grody
+technical details, read on.
+    Netscape 4, in both the Windows and Solaris versions, gets it
+wrong if an interlaced image has a border optimised out on the
+first frame (in the manner described in "Size is important"
+above). The symptom is that black, non-transparent lines appear
+every fourth pixel down "transparent" areas of the image. This is
+*unquestionably* a bug in Communicator rather than InterGif
+(especially in view of the fact that Netscape 3.02 gets it
+right), but, powerless as I am in the face of Netscape
+Corporation, I've stopped InterGif from optimising out the border
+if an interlaced GIF is being made.
+    This means that such GIFs end up being compressed less
+optimally than they might. If this is a problem (and it may not
+be, as interlaced GIFs usually end up compressed less well than
+non-interlaced ones anyway) you can use the new -trim option to
+*remove*, rather than just avoid compressing, the transparent
+border. When using -trim, InterGif's output will *not* be the
+same size in pixels as the input image (it is in all other
+cases). You can use the HSPACE= and VSPACE= attributes of the
+HTML <IMG> tag to produce a transparent border around a trimmed
+image.
+
+
+        Using ChangeFSI with InterGif
+        -----------------------------
+
+Some very powerful results are possible using this option. You
+need to read the help file "FSIuse" inside the !ChangeFSI
+directory, to know what to put in the InterGif's ChangeFSI
+Options icon (or pass with the -c command-line option).
+
+  * Versions of ChangeFSI
+
+There are several different versions of ChangeFSI circulating.
+The one available on Acorn's FTP site is, at time of writing,
+version 1.12, but there are later versions: I think these were
+distributed with RiscOS 3.6 and 3.7. The version I've got calls
+itself 1.13S, and I can't remember where I got it.
+    The only problem that older versions cause to InterGif, is
+that some early versions set ChangeFSI$Dir in their !Run files
+but not in their !Boot files, so InterGif won't know where to
+find the ChangeFSI program until ChangeFSI has already been run
+once. Version 1.12 fixes this.
+    In some versions of ChangeFSI, the FSIuse help file mentioned
+above is in !ChangeFSI.Documents rather than !ChangeFSI itself.
+
+  * ChangeFSI only knows about single-frame files
+
+This means that if you wish to run ChangeFSI on an animation file
+-- if, for instance, you've got an animated GIF you want to
+reduce in size -- you have to use InterGif twice.
+    The first time, you need to have the "Split output files" or
+-split option set: InterGif will produce a whole series of
+one-frame sprite files.
+    You then need to feed these sprite files back into InterGif,
+this time with Join input files or -join selected (plus your
+ChangeFSI options to reduce size or whatever): this will produce
+the reduced-size animation file you wanted.
+
+  * ChangeFSI doesn't know about masking or transparency
+
+ChangeFSI treats all input files as having a completely solid
+mask (no transparency). There isn't really a good workaround for
+this, as ChangeFSI can't know what background colour to fade
+"half-lit" edge pixels against.
+    All you can really do is edit your animation afterwards, in
+Paint or The Complete Animator, to re-supply the transparency by
+hand.
+
+  * Example ChangeFSI settings
+
+If all you're doing is using ChangeFSI to cope with an input
+format that InterGif doesn't understand itself, you just need to
+click on the ChangeFSI... button to open the "InterGif calling
+ChangeFSI" window, tick the tickbox, and enter
+        28
+in the Options icon. The "28" tells ChangeFSI to convert things
+to 256-colour sprites. The command-line equivalent would be
+something like
+        intergif in/bmp -o out/gif -c "28"
+
+To reduce the input file to half-size, enter
+        28 1:2 1:2
+or use a command like
+        intergif in -o out -c "28 1:2 1:2"
+
+If you've got a "deep" (16bpp or 24bpp) input image, you can use
+ChangeFSI to convert it to a deep sprite, and then tell InterGif
+to choose the optimal 256-colour palette, by entering
+        S32,90,90
+and then choosing Find best in the "InterGif palette options"
+window; or, from the command line,
+        intergif in -o out -c "S32,90,90" -best 256
+Older versions of ChangeFSI won't understand the S32,90,90 option
+though, and you may get an error.
+
+My favourite one is converting a whole directory of output files
+from POV-Ray for Windows (in 24bpp Targa format) into a
+reduced-size animated GIF in one operation:
+        intergif frame000/tga -o anim/gif -join -c "28 1:3 1:3"
+
+
+        See also
+        --------
+
+    The InterGif page
+        http://utter.chaos.org.uk/~pdh/software/intergif.htm
+    The AADraw page
+        http://utter.chaos.org.uk/~pdh/software/aadraw.htm
+    The Complete Animator
+        http://www.iota.co.uk/animator/
+    GIF89a specification
+        http://asterix.seas.upenn.edu/~mayer/lzw_gif/gif89a.html
+
+
+                                                 pdh@chaos.org.uk
+	                                         5th October 2004

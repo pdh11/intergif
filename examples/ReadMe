@@ -1,0 +1,24 @@
+
+        EXAMPLE GIF WRITING CODE
+        ========================
+
+    This is a simple example program which creates a GIF file
+using the InterGif 6 source code as a library.
+    As well as the InterGif source code, you will need a copy of
+DeskLib in order to compile this example. If you're not using
+DeskLib, but are using RiscOSLib (bleurrgh) or OSLib instead,
+you'll need to go and fiddle with Source.c.routils in the
+InterGif source distribution.
+    Check out the Makefile: you'll need to tell the C compiler
+where to find "animlib.h" and the linker where to find the "Lib"
+file from the InterGif source distribution.
+    I used Acorn CC5.06 to test this code, but it should work on
+anything else too.
+    This code may be freely distributed, modified, given away,
+sold, anthologised etc., just like the InterGif code itself. If
+you do anything interesting with it, let me know!
+
+    For example GIF *reading* code, see the ViewerSrc directory.
+
+                                         pdh@utter.chaos.org.uk
+                                                  26th Oct 1997

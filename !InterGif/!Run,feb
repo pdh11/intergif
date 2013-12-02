@@ -1,0 +1,19 @@
+| !Run file for InterGif 6.15
+|
+Set InterGif$Dir <Obey$Dir>
+|
+| RISC OS 4 and 5 come with their own GIF file icon, so do not redefine it
+Set InterGif$ro4 1
+RMEnsure UtilityModule 4.00 Set InterGif$ro4 0
+If <InterGif$ro4>=1 Then IconSprites <Obey$Dir>.4Sprites Else IconSprites <Obey$Dir>.!Sprites
+Unset InterGif$ro4
+|
+| We need the new CLib
+RMEnsure SharedCLibrary 5.17 RMLoad System:Modules.CLib
+RMEnsure SharedCLibrary 5.46 Error This application requires SharedCLibrary 5.46 or later
+|
+Set Alias$InterGif "<Obey$Dir>.intergif "
+Set InterGif$Version "615"
+If "<File$Type_695>" = "" Then Set File$Type_695 GIF
+WimpSlot -min 64k -max 64k
+Run <InterGif$Dir>.!RunImage -iconbar

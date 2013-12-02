@@ -1,0 +1,243 @@
+# Makefile
+
+# RiscOS makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@chaos.org.uk>
+#
+
+.SUFFIXES:   .c .o .s .oo
+CCFlags = -depend !Depend -c -Ospace -throwback -IC: -DRISCOS
+ASFlags = -throwback -quit
+LinkFlags = -aif -o $@ -map -xref
+
+Libraries = desklib:o.desklib c:o.stubs
+
+IGObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
+            fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
+            loaddraw.o loadgif.o loadsprite.o loadtca.o main.o mediancut.o \
+            palettemap.o riemann.o riscos.o savegif.o savesprite.o split.o \
+            utilsro.o workspace.o
+
+WinObjects = o.resources o.window
+
+all: ^.!InterGif.intergif ^.!InterGif.!RunImage Lib
+    @Echo
+
+^.!InterGif.intergif: Lib $(Libraries)
+    Link $(LinkFlags) Lib $(Libraries) -list o.LinkMap -symbols o.Symbols
+    Squeeze -v $@
+
+^.!InterGif.!RunImage: $(WinObjects) $(Libraries)
+    Link $(LinkFlags) $(WinObjects) $(Libraries) -list o.LinkMapW -symbols o.SymbolsW
+    Squeeze -v $@
+
+Lib: $(IGObjects)
+    libfile -c -o Lib $(IGObjects)
+
+autotest: all
+    Copy @.^.!InterGif.intergif @.^.autotest.intergif f~c~v
+    dir @.^.autotest
+    amu -desktop
+
+enla: $(IGObjects)
+    enla o.animlib o.cfsi o.colmatch o.commonpal o.count o.frame o.from \
+            o.fromfile o.gifdecode o.gifencode o.histogram o.intergif o.join \
+            o.loaddraw o.loadgif o.loadsprite o.loadtca o.main o.mediancut \
+            o.palettemap o.riemann o.riscos o.savegif o.savesprite o.split \
+            o.utilsro o.workspace
+
+
+o.resources: Templates Menus Sprites
+    ResCompile -t Templates -m Menus -s Sprites -o s.resources
+    objasm $(ASflags) -to o.resources -from s.resources
+    delete s.resources
+
+.c.o:;	cc $(CCflags) -o $@ $<
+
+.c.oo:;	cc $(CCflags) -o $@ $< -DNO_WINDOWS=1
+
+.s.o:;	objasm $(ASflags) -to $@ -from $<
+
+# Dynamic dependencies:
+o.compress:	c.compress
+o.compress:	DeskLib:h.Sprite
+o.compress:	DeskLib:h.Core
+o.compress:	DeskLib:h.Wimp
+o.compress:	DeskLib:h.Coord
+o.compress:	Extras:h.Extras
+o.compress:	h.bitmap
+o.test:	c.test
+o.test:	h.animlib
+o.test:	h.utils
+o.fromfiles:	c.fromfiles
+o.fromfiles:	h.animlib
+o.fromfiles:	h.utils
+o.memflex:	c.memflex
+o.memflex:	C:h.kernel
+o.memflex:	DeskLib:h.Wimp
+o.memflex:	DeskLib:h.Core
+o.memflex:	DeskLib:h.WimpSWIs
+o.memflex:	h.memflex
+o.memflex:	h.dynamic
+o.window:	c.window
+o.window:	C:h.kernel
+o.window:	DeskLib:h.Wimp
+o.window:	DeskLib:h.Core
+o.window:	DeskLib:h.WimpSWIs
+o.window:	DeskLib:h.GFX
+o.window:	DeskLib:h.Menu
+o.window:	DeskLib:h.Event
+o.window:	DeskLib:h.Screen
+o.window:	DeskLib:h.Template
+o.window:	DeskLib:h.Sprite
+o.window:	DeskLib:h.Coord
+o.window:	DeskLib:h.LinkList
+o.window:	DeskLib:h.DragASpr
+o.window:	DeskLib:h.Window
+o.window:	DeskLib:h.Pointer
+o.window:	DeskLib:h.Core
+o.window:	DeskLib:h.Icon
+o.window:	DeskLib:h.Window
+o.window:	DeskLib:h.Error
+o.window:	DeskLib:h.Icon
+o.window:	DeskLib:h.Sprite
+o.window:	DeskLib:h.Hourglass
+o.window:	DeskLib:h.Str
+o.animlib:	c.animlib
+o.animlib:	h.utils
+o.animlib:	h.animlib
+o.animlib:	h.gifdecode
+o.animlib:	h.gifencode
+o.animlib:	h.animlib
+o.cfsi:	c.cfsi
+o.cfsi:	C:h.kernel
+o.cfsi:	DeskLib:h.Wimp
+o.cfsi:	DeskLib:h.Core
+o.cfsi:	DeskLib:h.WimpSWIs
+o.cfsi:	h.utils
+o.cfsi:	h.animlib
+o.cfsi:	h.animlib
+o.cfsi:	h.cfsi
+o.colmatch:	c.colmatch
+o.colmatch:	h.animlib
+o.colmatch:	h.utils
+o.commonpal:	c.commonpal
+o.commonpal:	h.animlib
+o.commonpal:	h.utils
+o.commonpal:	h.gifencode
+o.commonpal:	h.workspace
+o.commonpal:	h.frame
+o.count:	c.count
+o.count:	h.animlib
+o.count:	h.count
+o.frame:	c.frame
+o.frame:	h.animlib
+o.frame:	h.utils
+o.frame:	h.frame
+o.from:	c.from
+o.from:	h.animlib
+o.from:	h.utils
+o.fromfile:	c.fromfile
+o.fromfile:	h.utils
+o.fromfile:	h.animlib
+o.fromfile:	h.animlib
+o.gifdecode:	c.gifdecode
+o.gifdecode:	h.gifdecode
+o.gifdecode:	h.workspace
+o.gifdecode:	h.utils
+o.gifdecode:	h.animlib
+o.gifencode:	c.gifencode
+o.gifencode:	h.gifencode
+o.gifencode:	h.workspace
+o.gifencode:	h.utils
+o.gifencode:	h.animlib
+o.histogram:	c.histogram
+o.histogram:	h.animlib
+o.histogram:	h.utils
+o.intergif:	c.intergif
+o.intergif:	h.animlib
+o.intergif:	h.utils
+o.intergif:	h.split
+o.intergif:	h.cfsi
+o.intergif:	h.intergif
+o.join:	c.join
+o.join:	h.animlib
+o.join:	h.cfsi
+o.join:	h.utils
+o.loaddraw:	c.loaddraw
+o.loaddraw:	DeskLib:h.Sprite
+o.loaddraw:	DeskLib:h.Core
+o.loaddraw:	DeskLib:h.Wimp
+o.loaddraw:	DeskLib:h.Coord
+o.loaddraw:	DeskLib:h.Str
+o.loaddraw:	DeskLib:h.GFX
+o.loaddraw:	DeskLib:h.Wimp
+o.loaddraw:	DeskLib:h.WimpSWIs
+o.loaddraw:	DeskLib:h.SWI
+o.loaddraw:	DeskLib:h.ColourTran
+o.loaddraw:	h.utils
+o.loaddraw:	h.animlib
+o.loaddraw:	h.animlib
+o.loaddraw:	h.antialias
+o.loadgif:	c.loadgif
+o.loadgif:	h.animlib
+o.loadgif:	h.utils
+o.loadgif:	h.gifdecode
+o.loadgif:	h.gifencode
+o.loadgif:	h.workspace
+o.loadsprite:	c.loadsprite
+o.loadsprite:	h.utils
+o.loadsprite:	h.animlib
+o.loadsprite:	h.animlib
+o.loadsprite:	h.sprite
+o.loadtca:	c.loadtca
+o.loadtca:	h.animlib
+o.loadtca:	h.utils
+o.loadtca:	h.riemann
+o.loadtca:	h.workspace
+o.main:	c.main
+o.main:	C:h.kernel
+o.main:	DeskLib:h.Core
+o.main:	h.memflex
+o.main:	h.version
+o.main:	h.animlib
+o.main:	h.count
+o.main:	h.split
+o.main:	h.intergif
+o.mediancut:	c.mediancut
+o.mediancut:	h.animlib
+o.mediancut:	h.utils
+o.palettemap:	c.palettemap
+o.palettemap:	h.animlib
+o.palettemap:	h.utils
+o.riemann:	c.riemann
+o.riemann:	h.riemann
+o.savegif:	c.savegif
+o.savegif:	h.animlib
+o.savegif:	h.gifencode
+o.savegif:	h.frame
+o.savegif:	h.count
+o.savegif:	h.utils
+o.savegif:	h.workspace
+o.savesprite:	c.savesprite
+o.savesprite:	h.animlib
+o.savesprite:	h.utils
+o.savesprite:	h.workspace
+o.savesprite:	h.sprite
+o.split:	c.split
+o.split:	h.utils
+o.split:	h.animlib
+o.utilsro:	c.utilsro
+o.utilsro:	C:h.kernel
+o.utilsro:	DeskLib:h.File
+o.utilsro:	DeskLib:h.Core
+o.utilsro:	DeskLib:h.SWI
+o.utilsro:	DeskLib:h.Hourglass
+o.utilsro:	h.utils
+o.utilsro:	h.animlib
+o.workspace:	c.workspace
+o.workspace:	h.utils
+o.workspace:	h.animlib
+o.workspace:	h.workspace
