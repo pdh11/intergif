@@ -1,0 +1,5 @@
+WimpSlot 16000K
+make -C <Obey$Dir>.src -f makefile.ros
+make -C <Obey$Dir>.viewersrc -f makefile.ros
+make -C <Obey$Dir>.examples -f makefile.ros
+echo Done!

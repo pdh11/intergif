@@ -237,7 +237,7 @@ BOOL Anim_SaveSprite( const anim a, FILE *output, int nFrom, int nTo, BOOL bNewF
 
         if ( bNewFormat )
         {
-          int mode_specifier;
+          int mode_specifier = 0;
           switch ( bpp )
           {
             case 1: mode_specifier = (1<<27); break;

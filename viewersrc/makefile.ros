@@ -1,0 +1,36 @@
+# Makefile.ix
+
+# Unix makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=gcc
+LinkFlags = -o $@ -mlibscl -mthrowback -LDeskLib: -lDesk-scl
+cc = gcc
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -I../src
+Lib = ar
+LibFlags = cru $@
+ASFlags = -throwback -quit
+
+.SUFFIXES: .c .o
+
+Objects = viewer.o resources.o monotonic.o
+
+all: ../!IGViewer/!RunImage
+
+../!IGViewer/!RunImage: $(Objects) ../src/libanim.a
+	$(Link) $(LinkFlags) $(Objects) -L../src -lanim
+
+.c.o:
+	@echo Compiling $<
+	@$(cc) $(CCflags) -o $@ $<
+
+.s.o:
+	@echo Assembling $<
+	@asasm $(ASflags) -to $@ -from $<
+
+resources.s: Templates Menus Sprites
+	^.bin.ResCompile -t Templates -m Menus -s Sprites -o s.resources

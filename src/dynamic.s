@@ -59,13 +59,13 @@ DynamicArea_Alloc
             MOV     R1,#-1
             MOV     R0,#0                   ; create
             SWI     &20066                  ; XOS_DynamicArea
-            LDMVSFD R13!,{R2-R8,PC}^
+            LDMVSFD R13!,{R2-R8,PC}
             LDR     R0,[R13,#4]             ; R3 passed in
             STR     R3,[R0]
             LDR     R0,[R13]                ; R2 passed in
             STR     R1,[R0]
             MOV     R0,#0
-            LDMFD   R13!,{R2-R8,PC}^
+            LDMFD   R13!,{R2-R8,PC}
 
 ;---------------------------------------------------------------------------
 ; DynamicArea_Realloc
@@ -81,7 +81,7 @@ DynamicArea_Realloc
             LDMFD   R13!,{R2}               ; saved R1
             STR     R1,[R2]                 ; *not* STRVC
             MOVVC   R0,#0
-            LDMFD   R13!,{PC}^
+            LDMFD   R13!,{PC}
 
 ;---------------------------------------------------------------------------
 ; DynamicArea_Free
@@ -97,7 +97,7 @@ DynamicArea_Free
             SWI     &20066                  ; XOS_DynamicArea
             MOVVC   R0,#0
             STRVC   R0,[R12]
-            LDMFD   R13!,{PC}^
+            LDMFD   R13!,{PC}
 
 ;---------------------------------------------------------------------------
 ; MemoryPageSize
@@ -108,7 +108,7 @@ DynamicArea_Free
 MemoryPageSize
             STMFD   R13!,{R14}
             SWI     &20051                  ; XOS_ReadMemMapInfo
-            LDMFD   R13!,{PC}^
+            LDMFD   R13!,{PC}
 
 ;
             END

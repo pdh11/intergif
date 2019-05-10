@@ -37,6 +37,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "utils.h"
+
+#include "animlib.h"
+#include "antialias.h"
+
 /* We're allowed to include these headers, 'cos we only compile under RiscOS
  * anyway
  */
@@ -47,11 +52,6 @@
 #include "DeskLib:WimpSWIs.h"
 #include "DeskLib:SWI.h"
 #include "DeskLib:ColourTran.h"
-
-#include "utils.h"
-
-#include "animlib.h"
-#include "antialias.h"
 
 #if 0
 #define debugf printf
@@ -89,7 +89,7 @@ int TaskWindow_TaskInfo( int index );
  * Constructor                                                               *
  *---------------------------------------------------------------------------*/
 
-BOOL Anim_ConvertDraw( const void *data, unsigned int nSize,
+BOOL Anim_ConvertDraw( const void *data, size_t nSize,
                        anim_animfn animfn, anim_imagefn fn, void *handle )
 {
     draw_matrix tm = { 0x10000 * ANIM_AAFACTOR, 0,
@@ -109,17 +109,18 @@ BOOL Anim_ConvertDraw( const void *data, unsigned int nSize,
     anim_imageinfo pixels;
     os_error *e = NULL;
     BOOL bits24 = TRUE;
+    screen_modeval spritemode;
 
     /* check it's a Draw file, if not return NULL */
 
     if ( *(int*)data != 0x77617244 )            /* "Draw" */
-        return NULL;
+        return FALSE;
 
     if ( TaskWindow_TaskInfo(0) != 0 )
     {
         Anim_SetError( "InterGif cannot process Draw files in a taskwindow. "
                      "Please either press F12 or use the desktop front-end." );
-        return NULL;
+        return FALSE;
     }
 
     if ( !OSModule_Present( "DrawFile" ) )
@@ -130,14 +131,14 @@ BOOL Anim_ConvertDraw( const void *data, unsigned int nSize,
         if ( e )
         {
             Anim_SetError( "DrawFile module not loaded: %s", e->errmess );
-            return NULL;
+            return FALSE;
         }
     }
 
     if ( DrawFile_BBox( 0, data, nSize, &tm, &box ) )
     {
         Anim_SetError( "Invalid Draw file\n" );
-        return NULL;
+        return FALSE;
     }
 
     tm.x2 = 3584-box.min.x;
@@ -175,7 +176,7 @@ tryagain:
     if ( !pixels.pBits )
     {
         Anim_NoMemory( "fromdraw" );
-        return NULL;
+        return FALSE;
     }
 
 #if DEBUG
@@ -235,8 +236,15 @@ tryagain:
     debugf( "Creating big sprite (%dx%d,%d bytes) total size would be %dx%d\n",
             spritex, sectiony, areasize, spritex, spritey );
 
-    e = Sprite_Create( area, "drawfile", FALSE, spritex, sectiony,
-                       bits24 ? ((6<<27)+(90<<14)+(90<<1)+1) : 28 );
+    if (bits24) {
+        spritemode.sprite_mode.istype = 1;
+        spritemode.sprite_mode.horz_dpi = 90;
+        spritemode.sprite_mode.vert_dpi = 90;
+        spritemode.sprite_mode.type = 6;
+    } else {
+        spritemode.screen_mode = 28;
+    }
+    e = Sprite_Create( area, "drawfile", FALSE, spritex, sectiony, spritemode);
 
     /* Sprite_Create will give an error on old (non-24-bit-capable) machines
      * so try again in 8bit

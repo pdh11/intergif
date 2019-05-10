@@ -55,7 +55,7 @@ XDrawFile_BBox                  * &65541
 ;        MOV     R4,#1
 ;        SWI     XColourTrans_ReadPalette
 ;        MOVVC   R0,#0
-;        LDMFD   R13!,{R4,PC}^
+;        LDMFD   R13!,{R4,PC}
 ;
 
 ;--------------------------------------------------------------------
@@ -66,7 +66,7 @@ XDrawFile_BBox                  * &65541
 ;        STMFD   R13!,{R14}
 ;        SWI     XOS_ReadModeVariable
 ;        MOV     R0,R2
-;        LDMFD   R13!,{PC}^
+;        LDMFD   R13!,{PC}
 ;
 
 ;--------------------------------------------------------------------
@@ -80,7 +80,7 @@ Sprite_RemoveLeftHandWastage
         MOV     R0,#512
         ADD     R0,R0,#54
         SWI     XOS_SpriteOp
-        LDMFD   R13!,{PC}^
+        LDMFD   R13!,{PC}
 
 
 ;----------------------------------------------------------------------
@@ -93,7 +93,7 @@ DrawFile_BBox
         LDR     R4,[R13,#8]         ; arg5 is on the stack
         SWI     XDrawFile_BBox
         MOVVC   R0,#0
-        LDMFD   R13!,{R4,PC}^
+        LDMFD   R13!,{R4,PC}
 
 
 ;------------------------------------------------------------------------
@@ -106,7 +106,7 @@ DrawFile_Render
         LDR     R4,[R13,#8]         ; arg5 is on the stack
         SWI     XDrawFile_Render
         MOVVC   R0,#0
-        LDMFD   R13!,{R4,PC}^
+        LDMFD   R13!,{R4,PC}
 
 
 ;------------------------------------------------------
@@ -120,7 +120,7 @@ OSModule_Present
         SWI     XOS_Module
         MOVVC   R0,#1
         MOVVS   R0,#0
-        LDMFD   R13!,{R4,R5,PC}^
+        LDMFD   R13!,{R4,R5,PC}
 
 
 ;------------------------------------------------------
@@ -133,7 +133,7 @@ OSModule_Load
         MOV     R0,#1
         SWI     XOS_Module
         MOVVC   R0,#0
-        LDMFD   R13!,{PC}^
+        LDMFD   R13!,{PC}
 
 
 ;-------------------------------------------
@@ -144,7 +144,7 @@ TaskWindow_TaskInfo
         STMFD   R13!,{R14}
         SWI     XTaskWindow_TaskInfo
         MOVVS   R0,#0
-        LDMFD   R13!,{PC}^
+        LDMFD   R13!,{PC}
 
 ;
         END

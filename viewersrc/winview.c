@@ -195,7 +195,7 @@ BOOL View_New( const char *fname, int nCmdShow )
 
     v->nFrame = -1;
     v->filename = strdup( fname );
-    v->a = Anim_FromFile( fname, NULL );
+    v->a = Anim_FromFile( fname, NULL, FALSE, FALSE, FALSE, FALSE  );
     if ( v->a && Anim_CommonPalette(v->a) )
     {
         x = v->a->nWidth;
