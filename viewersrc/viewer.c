@@ -44,7 +44,7 @@
 #define fdebugf 1?0:fprintf
 /* #define fdebugf fprintf */
 
-#include "^.src.AnimLib.h"
+#include "AnimLib.h"
 
 static int quitapp = FALSE;
 static int ackpending = FALSE;
@@ -85,6 +85,7 @@ extern int OS_ReadMonotonicTime(void);
 
 static wimp_point playtools; /* Size of playtools window */
 
+#if 0
 extern void Error_Report(int errornum, char *report, ...)
 {
     va_list ap;
@@ -101,6 +102,7 @@ extern void Error_Report(int errornum, char *report, ...)
 
     va_end(ap);
 }
+#endif
 
 #define message_OPENURL 0x4AF80
 
@@ -346,7 +348,7 @@ static sprite_areainfo *CreateBufferSprite( anim a, int *bgc )
     spr->rightbit = ((a->nWidth & 3) * 8 - 1) & 31;
     spr->imageoffset = 44 + 256*8;
     spr->maskoffset = 44 + 256*8 + abw;
-    spr->screenmode = 28;
+    spr->screenmode.screen_mode = 28;
 
     n = a->pFrames->pal->nColours;
     pPalSrc = a->pFrames->pal->pColours;
@@ -399,7 +401,7 @@ static void View_New( const char *name )
     const char *leafname;
     int leaflen;
 
-    theView->a = Anim_FromFile( name, NULL, FALSE, FALSE, FALSE );
+    theView->a = Anim_FromFile( name, NULL, FALSE, FALSE, FALSE, FALSE );
 
     if ( !theView->a )
     {
@@ -472,7 +474,7 @@ static void View_New( const char *name )
         Wimp_CreateWindow( &Template_play, &theView->wPlay );
     }
     else
-        theView->wPlay = NULL;
+        theView->wPlay = 0;
 
     theView->nFrame = -1;
     theView->nPlaying = 0;
@@ -664,7 +666,11 @@ int main( int argc, char *argv[] )
             case message_QUIT:
         	quitapp=TRUE;
         	break;
+            default:
+                break;
             }
+            break;
+        default:
             break;
         }
     }

@@ -1,0 +1,13 @@
+X Wipe <Obey$Dir>.!InterGif.!RunImage ~C
+X Wipe <Obey$Dir>.!InterGif.intergif ~C
+X Wipe <Obey$Dir>.!IGViewer.!RunImage ~C
+X Wipe <Obey$Dir>.examples.igexample ~C
+
+X Wipe <Obey$Dir>.src.libanim/a ~C
+
+X Wipe <Obey$Dir>.examples.o ~CR
+X Wipe <Obey$Dir>.src.o ~CR
+X Wipe <Obey$Dir>.viewersrc.o ~CR
+
+X Wipe <Obey$Dir>.src.s.resources ~C
+X Wipe <Obey$Dir>.viewersrc.s.resources ~C

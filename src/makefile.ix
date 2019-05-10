@@ -11,19 +11,25 @@ Link=cc
 LinkFlags = -o $@
 cc = cc
 CCflags = -O6 --unsigned-char -c -Wall -Wno-unused
+Lib = ar
+LibFlags = cru $@
 
 .SUFFIXES: .c .o
 
-Objects = animlib.o colmatch.o commonpal.o count.o frame.o from.o \
+LibObjects = animlib.o colmatch.o commonpal.o count.o frame.o from.o \
             fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
-            loadgif.o loadsprite.o loadtca.o main.o mediancut.o \
+            loadgif.o loadsprite.o loadtca.o mediancut.o \
             palettemap.o riemann.o savegif.o savesprite.o split.o \
             win32.o workspace.o
+IGObjects = main.o
 
 all: ../intergif
 
-../intergif: $(Objects)
-	$(Link) $(LinkFlags) $(Objects)
+../intergif: $(IGObjects) libanim.a
+	$(Link) $(LinkFlags) $(IGObjects) -L. -lanim
+
+libanim.a: $(LibObjects)
+	$(Lib) $(LibFlags) $(LibObjects)
 
 .c.o:
 	@echo Compiling $<

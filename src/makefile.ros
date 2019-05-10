@@ -1,0 +1,48 @@
+# Makefile.ix
+
+# Unix makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=gcc
+LinkFlags = -o $@ -mlibscl -mthrowback
+cc = gcc
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -g
+Lib = ar
+LibFlags = cru $@
+ASFlags = -throwback -quit
+
+.SUFFIXES: .c .o
+
+LibObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
+            fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
+            loaddraw.o loadgif.o loadsprite.o loadtca.o mediancut.o \
+            palettemap.o riemann.o riscos.o savegif.o savesprite.o split.o \
+            utilsro.o workspace.o
+IGObjects = main.o
+WinObjects = window.o resources.o
+
+all: ../!InterGif/intergif ../!InterGif/!RunImage
+
+../!InterGif/intergif: $(IGObjects) libanim.a
+	$(Link) $(LinkFlags) $(IGObjects) -L. -lanim -LDeskLib: -lDesk-scl
+
+../!InterGif/!RunImage: $(WinObjects)
+	$(Link) $(LinkFlags) $(WinObjects) -LDeskLib: -lDesk-scl
+
+libanim.a: $(LibObjects)
+	$(Lib) $(LibFlags) $(LibObjects)
+
+.c.o:
+	@echo Compiling $<
+	@$(cc) $(CCflags) -o $@ $<
+
+.s.o:
+	@echo Assembling $<
+	@asasm $(ASflags) -to $@ -from $<
+
+resources.s: Templates Menus Sprites
+	^.bin.ResCompile -t Templates -m Menus -s Sprites -o s.resources

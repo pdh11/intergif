@@ -949,7 +949,11 @@ int main( int argc, char *argv[] )
             case message_QUIT:
         	quitapp=TRUE;
         	break;
+            default:
+                break;
             }
+            break;
+        default:
             break;
         }
     }

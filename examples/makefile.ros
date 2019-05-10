@@ -1,0 +1,26 @@
+# Makefile.ix
+
+# Unix makefile for InterGif
+# (K) All Rites Reversed - Copy What You Like (see file Copying)
+#
+# Authors:
+#      Peter Hartley       <pdh@utter.chaos.org.uk>
+#
+
+Link=gcc
+LinkFlags = -o $@ -mlibscl -mthrowback -LDeskLib: -lDesk-scl
+cc = gcc
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -I../src
+
+.SUFFIXES: .c .o
+
+Objects = igexample.o
+
+all: igexample
+
+igexample: $(Objects) ../src/libanim.a
+	$(Link) $(LinkFlags) $(Objects) -L../src -lanim
+
+.c.o:
+	@echo Compiling $<
+	@$(cc) $(CCflags) -o $@ $<
